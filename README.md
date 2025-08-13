@@ -49,12 +49,8 @@ A complete FastAPI-based billing system that:
 ### 1️⃣ Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/billing-invoice-system.git
-cd billing-invoice-system
-
-
-1. Clone/copy this project directory.
-
+git clone https://github.com/raj-ponmani/billing_system.git
+cd billing_system
 ```
 
 ### 2️⃣ Create a Python venv & install deps:
