@@ -1,0 +1,169 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>Purchase #{{ purchase.id }}</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px auto;
+        max-width: 800px;
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
+      }
+      h1, h2 {
+        color: #333;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: white;
+        border-radius: 6px;
+        overflow: hidden;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+        margin-top: 20px;
+      }
+      th, td {
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+        text-align: left;
+      }
+      th {
+        background-color: #f1f1f1;
+      }
+      tr:hover {
+        background-color: #f9f9f9;
+      }
+      .summary {
+        margin-top: 20px;
+        padding: 15px;
+        background-color: white;
+        border-radius: 6px;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+      }
+      .summary p {
+        margin: 5px 0;
+        font-size: 16px;
+      }
+      .summary strong {
+        color: #333;
+      }
+      .summary-table {
+        margin-left: auto; /* pushes to right side */
+        border-collapse: collapse;
+      }
+
+      .summary-table td {
+        padding: 4px 8px;
+      }
+
+      .summary-table td:first-child {
+        text-align: right; /* labels aligned to right */
+        white-space: nowrap; /* prevents wrapping */
+      }
+
+      .summary-table td:last-child {
+        text-align: right; /* numbers aligned to right */
+      }
+      a {
+        color: #007bff;
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+      .back-btn {
+        display: inline-block;
+        margin-top: 20px;
+        background-color: #6c757d;
+        color: white;
+        padding: 8px 14px;
+        border-radius: 4px;
+        text-decoration: none;
+      }
+      .back-btn:hover {
+        background-color: #5a6268;
+      }
+      .page-container{
+        justify-content: space-between;
+        align-items: flex-end;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Purchase #{{ purchase.id }}</h1>
+    <p><strong>Customer Email:</strong> {{ purchase.customer_email }}</p>
+    <p><strong>Created:</strong> {{ purchase.created_at.strftime('%d-%m-%Y %H:%M') }}</p>
+
+    <h2>Items</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Product ID</th>
+          <th>Name</th>
+          <th>Quantity</th>
+          <th>Unit Price</th>
+          <th>Purchase Price</th>
+          <th>Tax %</th>
+          <th>Tax Payable</th>
+          <th>Total Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in items %}
+        <tr>
+          <td>{{ item.product_id }}</td>
+          <td>{{ item.name }}</td>
+          <td>{{ item.quantity }}</td>
+          <td>{{ item.unit_price }}</td>
+          <td>{{ item.purchase_price }}</td>
+          <td>{{ item.tax_percentage }}</td>
+          <td>{{ item.tax_amount }}</td>
+          <td>{{ item.total_price }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div class="summary">
+      <table class="summary-table">
+        <tr>
+          <td>Total price without tax:</td>
+          <td>{{ "%.2f"|format(total_without_tax) }}</td>
+        </tr>
+        <tr>
+          <td>Total tax payable:</td>
+          <td>{{ "%.2f"|format(total_tax) }}</td>
+        </tr>
+        <tr>
+          <td>Net price of the purchased item:</td>
+          <td>{{ "%.2f"|format(net_price) }}</td>
+        </tr>
+        <tr>
+          <td>Rounded down value of the purchased items net price:</td>
+          <td>{{ "%.2f"|format(rounded_net_price) }}</td>
+        </tr>
+        <tr>
+          <td>Balance payable to the customer:</td>
+          <td>{{ "%.2f"|format(balance_payable) }}</td>
+        </tr>
+      </table>
+      <hr>
+      {% if denominations %}
+        <h4 style="text-align: right;">Balance Denomination:</h4>
+        <table class="summary-table">
+          {% for denom, count in denominations.items() %}
+            <tr>
+              <td>{{ denom }}</td>
+              <td>{{ count }}</td>
+            </tr>
+          {% endfor %}
+        </table>
+      {% endif %}
+    </div>
+
+    <a class="back-btn" href="/purchases/?email={{ purchase.customer_email }}">Back to Purchases</a>
+  </body>
+</html>

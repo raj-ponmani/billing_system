@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Invoice</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 6px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #333;
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 8px 10px;
+            text-align: right;
+        }
+        table th {
+            background-color: #f0f0f0;
+            font-weight: bold;
+            text-align: right;
+        }
+        table th:first-child, table td:first-child {
+            text-align: left;
+        }
+        .summary-table {
+            margin-top: 15px;
+            width: 300px;
+            float: right;
+            border-collapse: collapse;
+        }
+        .summary-table th, .summary-table td {
+            border: 1px solid #ddd;
+            padding: 6px 10px;
+            text-align: right;
+        }
+        .summary-table th {
+            background-color: #f0f0f0;
+        }
+        .footer {
+            clear: both;
+            margin-top: 20px;
+            font-size: 12px;
+            color: #666;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Invoice</h2>
+    <p><strong>Customer:</strong> {{ email }}</p>
+
+    <!-- Main Items Table -->
+    <table>
+        <thead>
+        <tr>
+            <th>Product</th>
+            <th>Qty</th>
+            <th>Unit Price</th>
+            <th>Tax %</th>
+            <th>Amount</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for it in items %}
+        <tr>
+            <td>{{ it.name }}</td>
+            <td>{{ it.quantity }}</td>
+            <td>{{ "%.2f"|format(it.unit_price) }}</td>
+            <td>{{ "%.2f"|format(it.tax_percentage) }}</td>
+            <td>{{ "%.2f"|format(it.total_price) }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Summary Table -->
+    <table class="summary-table">
+        <tr>
+            <th>Total</th>
+            <td>{{ "%.2f"|format(total) }}</td>
+        </tr>
+        <tr>
+            <th>Paid</th>
+            <td>{{ "%.2f"|format(paid) }}</td>
+        </tr>
+        <tr>
+            <th>Change</th>
+            <td>{{ "%.2f"|format(change) }}</td>
+        </tr>
+    </table>
+
+    <!-- Balance Denominations -->
+    {% if denominations %}
+    <table class="summary-table" style="margin-top: 10px;">
+        <tr>
+            <th colspan="2">Balance Denomination</th>
+        </tr>
+        {% for denom, count in denominations.items() %}
+        <tr>
+            <td>{{ denom }}</td>
+            <td>{{ count }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+
+    <div class="footer">
+        Thank you for your purchase!<br>
+        This is a system-generated invoice.
+    </div>
+</div>
+</body>
+</html>
