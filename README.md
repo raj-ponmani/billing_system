@@ -66,7 +66,7 @@ pip install -r requirements.txt
 Create a .env file in the project root:
 ```dtd
 DATABASE_URL=postgresql+asyncpg://user:password@localhost:5432/dbname
-BREVO_API_KEY=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
+BREVO_API_KEY=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
 ```
 
 - For email sending I've integrated Brevo so please use the same API key I provided here.
